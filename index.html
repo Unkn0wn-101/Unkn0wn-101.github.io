@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ersi Sallaku — Digital Graphic Designer</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #CCA300;
+            --gold-light: #D4B050;
+            --charcoal: #272727;
+            --cream: #EEE7D7;
+            --black: #0a0a0a;
+            --white: #ffffff;
+        }
+
+        /* Scroll Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gold);
+            width: 0%;
+            z-index: 99999;
+            transition: width 0.1s ease;
+        }
+
+        /* Back to Top Button */
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #back-to-top:hover {
+            background: var(--charcoal);
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* Filter Buttons */
+        .filter-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            margin: 0.3rem;
+            background: transparent;
+            border: 1px solid var(--charcoal);
+            color: var(--charcoal);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--charcoal);
+        }
+
+        .project-card {
+            transition: all 0.4s ease;
+        }
+
+        .project-card.hidden {
+            display: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        /* Header / Navigation */
+        .header {
+            background: var(--charcoal);
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: var(--gold);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            height: 100vh;
+            background: var(--charcoal);
+            transition: right 0.3s ease;
+            z-index: 999;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav a {
+            display: block;
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(204, 163, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .portfolio-hero {
+            background: var(--charcoal);
+            padding: 5rem 4rem 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            display: block;
+            opacity: 0;
+            animation: fadeInDown 1s ease forwards 0.3s;
+        }
+
+        .hero-intro {
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.8s;
+        }
+
+        .hero-intro h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-intro h1 span {
+            color: var(--gold);
+        }
+
+        .hero-intro p {
+            font-size: 1.1rem;
+            color: var(--cream);
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            font-weight: 300;
+            line-height: 1.9;
+            opacity: 0.85;
+        }
+
+        .hero-tags {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 1.2s;
+        }
+
+        .hero-tag {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Project Grid */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        .projects-section {
+            padding: 6rem 0;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 4rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 50px rgba(204, 163, 0, 0.2);
+        }
+
+        .project-image {
+            width: 100%;
+            height: auto;
+            min-height: 400px;
+            background: var(--charcoal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: var(--charcoal);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 3rem;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            background: rgba(204, 163, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .project-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .project-brief {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--charcoal);
+            font-weight: 300;
+        }
+
+        .view-btn {
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .view-btn:hover {
+            background: var(--charcoal);
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        /* Skills Section */
+        .skills-section {
+            background: white;
+            padding: 6rem 4rem;
+            margin: 4rem 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-item {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: var(--cream);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(204, 163, 0, 0.2);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-level {
+            font-size: 0.85rem;
+            color: var(--gold);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            padding: 6rem 4rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            color: var(--charcoal);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--charcoal);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .cta-btn-primary {
+            background: var(--charcoal);
+            color: var(--gold);
+        }
+
+        .cta-btn-primary:hover {
+            background: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-btn-secondary {
+            background: white;
+            color: var(--charcoal);
+        }
+
+        .cta-btn-secondary:hover {
+            background: var(--cream);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--charcoal);
+            padding: 4rem 4rem 3rem;
+            color: var(--cream);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(204, 163, 0, 0.3);
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Lightbox Base Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10000;
+        }
+
+        .lightbox-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .lightbox-btn {
+            background: var(--gold);
+            color: var(--charcoal);
+            border: none;
+            padding: 1.5rem 1rem;
+            border-radius: 4px;
+            font-size: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .lightbox-image {
+            max-width: 80vw;
+            max-height: 80vh;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gold);
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .container {
+                padding: 0 2rem;
+            }
+
+            .portfolio-hero {
+                padding: 4rem 2rem 3rem;
+            }
+
+            .project-content {
+                padding: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" onclick="scrollToTop()">↑</button>
+
+    <header class="header">
+        <div class="logo">ES DESIGN EXCELLENCY</div>
+        <nav class="nav">
+            <a href="#work">Work</a>
+            <a href="#skills">Skills</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close" onclick="toggleMobileMenu()">✕</button>
+        <a href="#work" onclick="toggleMobileMenu()">Work</a>
+        <a href="#skills" onclick="toggleMobileMenu()">Skills</a>
+        <a href="#about" onclick="toggleMobileMenu()">About</a>
+        <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
+    </div>
+
+    <section class="portfolio-hero">
+        <img src="DIGITAL_GRAPHIC_DESIGNER.png" alt="Design Excellency" class="hero-banner">
+        <div class="hero-intro">
+            <h1>Hi, I'm <span>Ersi</span> —</h1>
+            <p>A graphic designer from Nottingham, originally from Albania, studying Level 3 Digital & Graphic Design at Confetti. I create bold, meaningful designs that communicate clearly and leave a lasting impression. This is my journey so far.</p>
+        </div>
+        <div class="hero-tags">
+            <span class="hero-tag">Branding</span>
+            <span class="hero-tag">Editorial</span>
+            <span class="hero-tag">UI/UX</span>
+            <span class="hero-tag">Typography</span>
+            <span class="hero-tag">Social Impact</span>
+            <span class="hero-tag">Product Design</span>
+        </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="skills-section">
+        <div class="container">
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--charcoal); text-align: center; margin-bottom: 1rem;">Skills & Tools</h2>
+            <p style="text-align: center; color: var(--gold); margin-bottom: 2rem;">Software & design capabilities</p>
+            
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-icon">🎨</div>
+                    <div class="skill-name">Photoshop</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">✏️</div>
+                    <div class="skill-name">Illustrator</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📐</div>
+                    <div class="skill-name">InDesign</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📱</div>
+                    <div class="skill-name">Figma</div>
+                    <div class="skill-level">Proficient</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">🎬</div>
+                    <div class="skill-name">After Effects</div>
+                    <div class="skill-level">Intermediate</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">🏷️</div>
+                    <div class="skill-name">Branding</div>
+                    <div class="skill-level">Expert</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">✍️</div>
+                    <div class="skill-name">Typography</div>
+                    <div class="skill-level">Expert</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">🖼️</div>
+                    <div class="skill-name">UI/UX</div>
+                    <div class="skill-level">Proficient</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT / AESTHETIC SECTION -->
+    <section id="about" style="background: var(--charcoal); padding: 6rem 4rem; margin-bottom: 0;">
+        <div class="container">
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--gold); text-align: center; margin-bottom: 3rem;">About Me</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 3rem; align-items: center;">
+                <div>
+                    <img src="ES_logo.jpg" alt="ES Design Excellency" style="width: 100%; max-width: 350px; border-radius: 12px; display: block; margin: 0 auto;">
+                </div>
+                <div>
+                    <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); margin-bottom: 1.5rem;">My Story</h3>
+                    <p style="color: var(--cream); font-size: 1rem; line-height: 1.9; margin-bottom: 1.5rem;">
+                        I moved to the UK from Albania around 4 years ago for better opportunities. Design wasn't something I planned — it was something I fell into and quickly realised it was exactly what I wanted to do.
+                    </p>
+                    <p style="color: var(--cream); font-size: 1rem; line-height: 1.9; margin-bottom: 1.5rem;">
+                        I'm currently studying Level 3 Digital & Graphic Design at Confetti in Nottingham, and my goal is to continue into higher education and build a career doing what I love.
+                    </p>
+                    <p style="color: var(--cream); font-size: 1rem; line-height: 1.9;">
+                        My design approach is simple: <strong style="color: var(--gold);">keep it bold, keep it clear, make it memorable.</strong> Whether I'm designing a luxury brand, an album cover, or a social campaign — I want every piece to feel intentional.
+                    </p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-top: 3rem;">
+                <div style="background: rgba(204, 163, 0, 0.08); padding: 2rem; border-radius: 8px; border-top: 3px solid var(--gold);">
+                    <h4 style="color: var(--gold); font-size: 1.1rem; margin-bottom: 0.8rem;">My Style</h4>
+                    <p style="color: var(--cream); font-size: 0.95rem; line-height: 1.7;">Bold typography, high contrast, and designs that communicate without needing explanation.</p>
+                </div>
+                <div style="background: rgba(204, 163, 0, 0.08); padding: 2rem; border-radius: 8px; border-top: 3px solid var(--gold);">
+                    <h4 style="color: var(--gold); font-size: 1.1rem; margin-bottom: 0.8rem;">What Drives Me</h4>
+                    <p style="color: var(--cream); font-size: 0.95rem; line-height: 1.7;">Design that connects with culture — music, street art, luxury, social issues. I want my work to feel relevant.</p>
+                </div>
+                <div style="background: rgba(204, 163, 0, 0.08); padding: 2rem; border-radius: 8px; border-top: 3px solid var(--gold);">
+                    <h4 style="color: var(--gold); font-size: 1.1rem; margin-bottom: 0.8rem;">Where I'm Going</h4>
+                    <p style="color: var(--cream); font-size: 0.95rem; line-height: 1.7;">Higher education in graphic design and eventually working with brands that value bold, authentic creativity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="work" class="projects-section">
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--charcoal); text-align: center; margin-bottom: 1rem;">My Work</h2>
+            <p style="text-align: center; color: var(--gold); margin-bottom: 1rem; font-size: 1rem;">A collection of projects from my time studying at Confetti and beyond</p>
+
+            <!-- Confetti Badge -->
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <span style="display: inline-block; padding: 0.5rem 1.5rem; background: var(--charcoal); color: var(--cream); border-radius: 50px; font-size: 0.85rem; letter-spacing: 0.05em;">
+                    🎓 Currently studying Level 3 Digital & Graphic Design at <strong style="color: var(--gold);">Confetti, Nottingham</strong>
+                </span>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-section">
+                <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+                <button class="filter-btn" onclick="filterProjects('branding')">Branding</button>
+                <button class="filter-btn" onclick="filterProjects('ui')">UI Design</button>
+                <button class="filter-btn" onclick="filterProjects('print')">Print & Editorial</button>
+                <button class="filter-btn" onclick="filterProjects('social')">Social Impact</button>
+                <button class="filter-btn" onclick="filterProjects('product')">Product</button>
+            </div>
+
+            <!-- PROJECT 1: PERSONAL BRAND -->
+            <article class="project-card" data-category="branding">
+                <div class="project-image">
+                    <img src="ES_logo_3_copy.png" alt="ES Design Excellency Logo">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">Branding</span>
+                        <span class="meta-badge">Identity Design</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">ES Design Excellency — My Personal Brand</h2>
+                    <p class="project-brief">This was one of the most meaningful projects I've worked on — building my own identity as a designer. I wanted something that felt premium and professional but still represented me. The gold and charcoal palette came from wanting to stand out while keeping things refined. The logo, brand book, typography system and CV all came from this project.</p>
+                    <button onclick="openBrandBook()" class="view-btn">📖 View Brand Book</button>
+                    <button onclick="openResume()" class="view-btn" style="margin-left: 1rem;">📄 View Resume</button>
+                </div>
+            </article>
+
+            <!-- PROJECT 2: NOTTINGHAM HISTORY APP -->
+            <article class="project-card" data-category="ui">
+                <div class="project-image">
+                    <img src="A2_mockup_copy.jpg" alt="Nottingham History App">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">App Design</span>
+                        <span class="meta-badge">Brand Guidelines</span>
+                        <span class="meta-badge">Figma</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">Nottingham History App — UI & Brand Design</h2>
+                    <p class="project-brief">Designing an app for tourists and locals to explore Nottingham's history, restaurants, and landmarks. I went with a bold pink-to-purple gradient to make it feel modern and approachable rather than dry or academic. This was a great challenge in UI consistency — making sure the brand guidelines I created actually translated into the app screens.</p>
+                </div>
+            </article>
+
+            <!-- PROJECT 3: BLM CAMPAIGN -->
+            <article class="project-card" data-category="social">
+                <div class="project-image">
+                    <img src="BLM_mock_up_copy.jpg" alt="Black Lives Matter Campaign">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">Social Impact</span>
+                        <span class="meta-badge">Photoshop</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">Black Lives Matter — Public Awareness Campaign</h2>
+                    <p class="project-brief">This project meant a lot to me personally. The brief was about discrimination and awareness, and I wanted the design to hit hard and fast — something someone walking past would stop and read. Bold headline, strong iconography, minimal clutter. Design doesn't always have to look "pretty" — sometimes it just has to be honest.</p>
+                </div>
+            </article>
+
+            <!-- PROJECT 4: FIRE PLAYING CARDS -->
+            <article class="project-card" data-category="product">
+                <div class="project-image">
+                    <img src="Playing_Cards_Mock_Up2_copy.jpg" alt="Fire Playing Cards">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">Product Design</span>
+                        <span class="meta-badge">Packaging</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">Fire Playing Cards — My First Project</h2>
+                    <p class="project-brief">This was the very first project I ever did at Confetti. I chose a Halloween theme because I wanted to go dark and edgy — skulls, fire, neon orange accents. Looking back, I can see how much I've grown, but I'm still proud of this one. It was the project that showed me I actually enjoyed design.</p>
+                    <button onclick="openPlayingCards()" class="view-btn">🃏 View All Cards</button>
+                </div>
+            </article>
+
+            <!-- PROJECT 5: EPOKA ALBUM -->
+            <article class="project-card" data-category="print">
+                <div class="project-image">
+                    <img src="Summer_project_copy.jpg" alt="EPOKA Album Cover">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">Music Design</span>
+                        <span class="meta-badge">Photoshop</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">EPOKA — Album Cover Design</h2>
+                    <p class="project-brief">Grunge is a style I really connect with — it feels raw and real. For this album cover I layered vintage textures, distressed type and heavy grain over a black-and-white portrait to get that authentic street feel. My preferred style for music artwork — it should look like it sounds.</p>
+                </div>
+            </article>
+
+            <!-- PROJECT 6: BRABUS MAGAZINE -->
+            <article class="project-card" data-category="print">
+                <div class="project-image">
+                    <img src="Brabus_2_copy.jpg" alt="Brabus Magazine">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">Editorial Design</span>
+                        <span class="meta-badge">InDesign</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">Brabus Magazine — Luxury Automotive Editorial</h2>
+                    <p class="project-brief">Designing for a luxury brand like Brabus is a completely different challenge — everything has to feel premium and intentional. This was my first major editorial layout in InDesign, working with spread layouts, typography hierarchy, and photo treatment to create something that felt worthy of the brand.</p>
+                </div>
+            </article>
+
+            <!-- PROJECT 7: CONFETTI APP -->
+            <article class="project-card" data-category="ui">
+                <div class="project-image">
+                    <img src="Screenshot_2025-10-14_110311_copy.png" alt="Confetti Student App">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">UI/UX Design</span>
+                        <span class="meta-badge">Figma</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">Confetti Student Hub App</h2>
+                    <p class="project-brief">Designing an app for my own college was interesting because I actually know the users. I went with Confetti's bold yellow-green branding in a dark mode UI — it needed to feel modern and easy to navigate for students. This project really pushed my Figma skills forward.</p>
+                </div>
+            </article>
+
+            <!-- PROJECT 8: SNOOP DOG -->
+            <article class="project-card" data-category="product">
+                <div class="project-image">
+                    <img src="snoop_dog_copy.jpg" alt="Snoop Dogg Christmas Sweater">
+                </div>
+                <div class="project-content">
+                    <div class="project-meta">
+                        <span class="meta-badge">Product Design</span>
+                        <span class="meta-badge">Photoshop</span>
+                        <span class="meta-badge">2025</span>
+                    </div>
+                    <h2 class="project-title">Snoop Dogg Christmas Sweater Campaign</h2>
+                    <p class="project-brief">A fun one — designing a Christmas jumper campaign around Snoop Dogg. I got to play with seasonal typography and pop culture in the same piece. Not every project has to be serious — this was about getting the humour and energy right while still making it look designed.</p>
+                </div>
+            </article>
+
+        </section>
+    </div>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section">
+        <h2>Get In Touch</h2>
+        <p>If you like what you see or want to collaborate on something, feel free to reach out. Always happy to talk design.</p>
+        <div class="cta-buttons">
+            <a href="https://wa.me/447757126890" class="cta-btn cta-btn-primary" target="_blank">💬 WhatsApp Me</a>
+            <a href="/cdn-cgi/l/email-protection#ceabbcbda7fcfaf8f6fe8ea9a3afa7a2e0ada1a3" class="cta-btn cta-btn-secondary">📧 Email Me</a>
+        </div>
+    </section>
+
+    <!-- Brand Book Lightbox -->
+    <div id="brandBookLightbox" class="lightbox">
+        <button onclick="closeBrandBook()" class="lightbox-close">✕ Close</button>
+        <div class="lightbox-content">
+            <button onclick="prevBrandPage()" class="lightbox-btn">‹</button>
+            <div style="position: relative;">
+                <img id="brandBookImage" src="brandbook-page-1.png" class="lightbox-image">
+                <div class="lightbox-counter">
+                    Page <span id="currentBrandPage">1</span> of 8
+                </div>
+            </div>
+            <button onclick="nextBrandPage()" class="lightbox-btn">›</button>
+        </div>
+    </div>
+
+    <!-- Playing Cards Lightbox -->
+    <div id="playingCardsLightbox" class="lightbox">
+        <button onclick="closePlayingCards()" class="lightbox-close">✕ Close</button>
+        <div class="lightbox-content">
+            <button onclick="prevCard()" class="lightbox-btn">‹</button>
+            <div style="position: relative;">
+                <img id="cardImage" src="ace_of_spades.png" class="lightbox-image">
+                <div class="lightbox-counter">
+                    Card <span id="currentCard">1</span> of 6
+                </div>
+            </div>
+            <button onclick="nextCard()" class="lightbox-btn">›</button>
+        </div>
+    </div>
+
+    <!-- Resume Lightbox -->
+    <div id="resumeLightbox" class="lightbox">
+        <button onclick="closeResume()" class="lightbox-close">✕ Close</button>
+        <div class="lightbox-content">
+            <div style="position: relative;">
+                <img src="cv_copy.jpg" class="lightbox-image" style="max-width: 70vw; max-height: 85vh;">
+                <div style="position: absolute; bottom: -4rem; left: 50%; transform: translateX(-50%); display: flex; gap: 1rem;">
+                    <a href="cv_copy.jpg" download="ES_Design_Excellency_Resume.jpg" style="padding: 0.8rem 2rem; background: var(--gold); color: var(--charcoal); border: none; border-radius: 4px; font-weight: 600; text-decoration: none; display: inline-block;">
+                        ⬇️ Download Resume
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact" class="footer">
+        <div class="footer-content">
+            <div>
+                <h3>ES Design Excellency</h3>
+                <p>A young graphic designer from Nottingham, studying at Confetti on a Level 3 Digital & Graphic Design course. Specializing in bold, refined design solutions across branding, editorial, and digital media.</p>
+            </div>
+            <div>
+                <h3>Navigation</h3>
+                <div class="footer-links">
+                    <a href="#work">Work</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+            <div>
+                <h3>Connect</h3>
+                <div class="footer-links">
+                    <a href="https://linktr.ee/esdesignexcellency" target="_blank">LinkTree</a>
+                    <a href="/cdn-cgi/l/email-protection#bcd9cecfd58e888a848cfcdbd1ddd5d092dfd3d1">Email</a>
+                    <a href="https://wa.me/447757126890" target="_blank">WhatsApp Business</a>
+                    <a href="https://instagram.com/es_design_excellenc" target="_blank">Instagram</a>
+                    <a href="https://esdesignexcellency.myportfolio.com" target="_blank">Portfolio</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 ES Design Excellency. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Progress Bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+
+            // Back to Top visibility
+            const btn = document.getElementById('back-to-top');
+            if (scrollTop > 400) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Project Filter
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileNav').classList.toggle('active');
+        }
+
+        // Brand Book Gallery
+        let currentBrandPageNum = 1;
+        const totalBrandPages = 8;
+
+        function openBrandBook() {
+            document.getElementById('brandBookLightbox').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBrandBook() {
+            document.getElementById('brandBookLightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextBrandPage() {
+            if (currentBrandPageNum < totalBrandPages) {
+                currentBrandPageNum++;
+                updateBrandPage();
+            }
+        }
+
+        function prevBrandPage() {
+            if (currentBrandPageNum > 1) {
+                currentBrandPageNum--;
+                updateBrandPage();
+            }
+        }
+
+        function updateBrandPage() {
+            document.getElementById('brandBookImage').src = `brandbook-page-${currentBrandPageNum}.png`;
+            document.getElementById('currentBrandPage').textContent = currentBrandPageNum;
+        }
+
+        // Playing Cards Gallery
+        let currentCardNum = 1;
+        const cardImages = [
+            'ace_of_spades.png',
+            'king_of_spades.png',
+            'five_card.png',
+            'three_of_hearts.png',
+            'card_back.png',
+            'box_front.png'
+        ];
+
+        function openPlayingCards() {
+            document.getElementById('playingCardsLightbox').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePlayingCards() {
+            document.getElementById('playingCardsLightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextCard() {
+            if (currentCardNum < cardImages.length) {
+                currentCardNum++;
+                updateCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentCardNum > 1) {
+                currentCardNum--;
+                updateCard();
+            }
+        }
+
+        function updateCard() {
+            document.getElementById('cardImage').src = cardImages[currentCardNum - 1];
+            document.getElementById('currentCard').textContent = currentCardNum;
+        }
+
+        // Resume Viewer
+        function openResume() {
+            document.getElementById('resumeLightbox').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeResume() {
+            document.getElementById('resumeLightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Keyboard navigation for all lightboxes
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('brandBookLightbox').style.display === 'block') {
+                if (e.key === 'ArrowRight') nextBrandPage();
+                if (e.key === 'ArrowLeft') prevBrandPage();
+                if (e.key === 'Escape') closeBrand
