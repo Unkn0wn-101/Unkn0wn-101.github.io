@@ -1,0 +1,5 @@
+# Dependencies
+node_modules/
+
+# Build artifacts (keep dist/ as it's needed for the site to work)
+# dist/

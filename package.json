@@ -1,0 +1,28 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild speed-insights.js --bundle --outfile=dist/speed-insights.bundle.js --format=iife --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Unkn0wn-101/Unkn0wn-101.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Unkn0wn-101/Unkn0wn-101.github.io/issues"
+  },
+  "homepage": "https://github.com/Unkn0wn-101/Unkn0wn-101.github.io#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "serve": "^14.2.6"
+  }
+}
