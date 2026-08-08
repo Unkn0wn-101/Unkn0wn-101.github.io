@@ -1,0 +1,24 @@
+{
+  "name": "ersi-sallaku-portfolio",
+  "version": "1.0.0",
+  "description": "Digital Graphic Designer Portfolio with Vercel Speed Insights",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Unkn0wn-101/Unkn0wn-101.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Unkn0wn-101/Unkn0wn-101.github.io/issues"
+  },
+  "homepage": "https://github.com/Unkn0wn-101/Unkn0wn-101.github.io#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
