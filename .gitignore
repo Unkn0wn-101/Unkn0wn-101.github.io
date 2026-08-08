@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Lock files (kept in git for dependency consistency)
+# package-lock.json is tracked to ensure consistent dependency resolution
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
